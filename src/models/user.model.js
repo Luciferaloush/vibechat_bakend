@@ -32,9 +32,8 @@ const userSchema = mongoose.Schema({
          
       
     
-
 });
 
 
-const Users = mongoose.model('Users', userSchema);
+const Users = mongoose.model('UsersVibechat', userSchema);
 module.exports = {Users};

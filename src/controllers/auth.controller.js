@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const pool = require('../models/db');
 const { Users } = require('../models/user.model');
+const jwt = require('jsonwebtoken');
 const SALT = 10;
 const JWT_SECRET = process.env.JWT_SECRET || 'asdxasdxajtdmwajtdmw';
 const register = async (req, res) => {
@@ -11,9 +11,9 @@ const register = async (req, res) => {
                                         msg:"please enter a username and email and password"
                               })
                     }
-                    const existing = await Users.findOne({email});
-                    if(!existing){
-                              res.status(404).send({
+                    const existing = await Users.findOne({email: email});
+                    if(existing){
+                              return res.status(409).send({
                                         msg: "email already exists"
                               });
                     }
@@ -23,17 +23,48 @@ const register = async (req, res) => {
                               email,
                               password: hashedPassword
                     })
+                    const token = jwt.sign({id: user._id},JWT_SECRET ,);
                     await user.save();
-                    res.satus(201).json({
-                              user
-                    })
+                    res.status(201).json({token, ...user._doc});
+                    
           }catch(e){
                     res.status(500).json({
                               msg: "Invalid request" + e.message
                     })
           }
 }
-
+const login =async (req, res) => {
+          try{
+                    const {email, password} = req.body;
+                    if(!email || !password){
+                              return res.status(409).send({
+                                msg: 'email or password not valid',
+                              })
+                    }
+                    const user = await Users.findOne({ email });
+                    if (!user) {
+                        return res.status(404).send({
+                            SUCCESS: false,
+                            message: "User not found"
+                        });
+                    }                 
+                       const isMatch = await bcrypt.compare(password, user.password);
+                       if(!isMatch) {
+                              return res.status(404).send({
+                                        msg: "Invalid password"
+                              });
+                       }
+                       user.password = undefined;
+                       const token = jwt.sign({id: user._id},JWT_SECRET ,);
+ res.status(201).json({token, ...user._doc});
+                 
+          }catch(e){
+                    res.status(500).json({
+                              msg: "Invalid request" + e.message
+                    })      
+          }
+}
 module.exports = {
-          register
+          register,
+          login
 }
