@@ -12,6 +12,7 @@ app.use(cors());
 
 
 app.use('/chat/v1/api/auth', require('./src/routes/auth.router'));
+app.use('/chat/v1/api/conversation', require('./src/routes/conversations.router'));
 
 app.get('/', (req, res) => {
     console.log('test');
