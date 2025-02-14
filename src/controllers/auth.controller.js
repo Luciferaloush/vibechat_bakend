@@ -53,7 +53,6 @@ const login = errorHandler(async (req, res) => {
         return res.status(401).send({ msg: "Invalid password" });
     }
 
-    // إزالة كلمة المرور من الإرجاع
     user.password = undefined;
     const token = jwt.sign({ id: user._id }, JWT_SECRET);
     
