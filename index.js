@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
             const savedMessage = await saveMessage(convId, senderId, content);
             console.log("sendMessage: ");
             console.log(savedMessage);
-            io.to(convId).emit("newMessage", saveMessage);
+            io.to(convId).emit("newMessage", savedMessage);
         }catch(e){
             console.log(e);
         }
