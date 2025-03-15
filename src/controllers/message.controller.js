@@ -22,11 +22,11 @@ const fetchAllMessagesByConversationId = errorHandler(async (req, res) => {
     });
           
 })
-const saveMessage= errorHandler( async (convId, senderId, content) => {
+const saveMessage= errorHandler( async (conversationId, senderId, content) => {
           if(!convId || !senderId || !content){
                     throw new Error("المعلومات المطلوبة مفقودة");}
                     const newMessage = new MessagesVibechat({
-                              conversationId: convId,
+                              conversationId: conversationId,
                               senderId: senderId,
                               content: content
                     });
