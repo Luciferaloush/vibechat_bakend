@@ -33,13 +33,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendMessage', async(message) =>{
-        const {convId, senderId, content} = message;
+        const {conversationId, senderId, content} = message;
 
         try{
-            const savedMessage = await saveMessage(convId, senderId, content);
+            const savedMessage = await saveMessage(conversationId, senderId, content);
             console.log("sendMessage: ");
             console.log(savedMessage);
-            io.to(convId).emit("newMessage", savedMessage);
+            io.to(conversationId).emit("newMessage", savedMessage);
         }catch(e){
             console.log(e);
         }
