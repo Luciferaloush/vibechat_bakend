@@ -1,11 +1,19 @@
 const errorHandler = (fn) => {
-          return (req, res, next) => {
-              Promise.resolve(fn(req, res, next)).catch((e) => {
-                  res.status(500).json({
-                      msg: "Invalid request: " + e.message
-                  });
-              });
-          };
-      };
-      
-      module.exports = errorHandler;
+    return async (req, res, next) => {
+        try {
+            await fn(req, res, next);
+        } catch (e) {
+            // تأكد من أن لديك كائن res
+            if (res) {
+                res.status(500).json({
+                    msg: "Invalid request: " + e.message
+                });
+            } else {
+                console.error("Error without response context:", e);
+            }
+        }
+    };
+};
+
+
+module.exports = errorHandler;

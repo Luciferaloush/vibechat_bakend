@@ -29,6 +29,10 @@ const userSchema = mongoose.Schema({
                               message : 'Please enter al long password'
                     }
           },
+          profile_image:{
+            type: String,
+            default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQO9_H_BMfei2M9QHnxPlvqxdgK3_pylPnFjjcMrDGK0BPl1P5otuXMx5_1TJA5qn0zBE&usqp=CAU"
+          }
          
       
     

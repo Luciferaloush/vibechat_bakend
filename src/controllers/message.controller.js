@@ -22,27 +22,17 @@ const fetchAllMessagesByConversationId = errorHandler(async (req, res) => {
     });
           
 })
-const saveMessage = errorHandler(async (conversationId, senderId, content) => {
-    if (!conversationId || !senderId || !content) {
-        throw new Error("Required information is missing"); 
-    }
-
-    const newMessage = new MessagesVibechat({
-        conversationId,
-        senderId,
-        content,
-        createdAt: new Date() 
-    });
-
-    try {
-        const savedMessage = await newMessage.save();
-        console.log("Successfully saved message:", savedMessage); 
-        return savedMessage; 
-    } catch (error) {
-        console.error("Error saving message in model:", error); 
-        throw error; 
-    }
-});
+const saveMessage= errorHandler( async (conversationId, senderId, content) => {
+          if(!conversationId || !senderId || !content){
+                    throw new Error("المعلومات المطلوبة مفقودة");}
+                    const newMessage = new MessagesVibechat({
+                              conversationId: conversationId,
+                              senderId: senderId,
+                              content: content
+                    });
+                    const message = await newMessage.save();
+                    return message;
+})
 module.exports = {
           fetchAllMessagesByConversationId,
           saveMessage,

@@ -5,14 +5,13 @@ const errorHandler = require('../utils/error_handler');
 
 const SALT = 10;
 const JWT_SECRET = process.env.JWT_SECRET || 'asdxasdxajtdmwajtdmw';
-
 const register = errorHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password,profile_image} = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).send({ msg: "Please enter a username, email, and password" });
     }
-
+    
     const existing = await Users.findOne({ email });
     if (existing) {
         return res.status(409).send({ msg: "Email already exists" });
@@ -22,7 +21,8 @@ const register = errorHandler(async (req, res) => {
     const user = new Users({
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        profile_image,
     });
 
     // حفظ المستخدم أولاً
